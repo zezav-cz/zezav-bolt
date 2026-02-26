@@ -1,0 +1,22 @@
+---
+classes:
+  - web
+  - profile::uploader
+  - monitoring::node_exporter
+  - podman_quadlet
+  - profile::certbot
+profile::uploader::settings:
+  - restriction: 'restrict,command="rrsync /var/www/uploader"'
+    public_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDy8nNjXqO4l1tHZwkoRYvKhhmBCIpbp2LWb3W63USkv trojakjan24@gmail.com
+# sudo::configs:
+#   uploader_:
+web::fw_zone: 'drop'
+nginx::sendfile: 'on'
+nginx::http_tcp_nopush: 'on'
+nginx::http_tcp_nodelay: 'on'
+nginx::server_tokens: 'off'
+nginx::gzip: 'on'
+nginx::gzip_disable: 'msie6'
+nginx::ssl_protocols: 'TLSv1.2 TLSv1.3'
+nginx::ssl_ciphers: 'HIGH:!aNULL:!MD5'

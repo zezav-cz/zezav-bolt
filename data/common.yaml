@@ -1,0 +1,55 @@
+---
+accounts::group_list:
+  users: {}
+  admin: { ensure: absent }
+accounts::user::defaults::home_template: '/home/users/%s'
+accounts::user_defaults:
+  group: users
+  managehome: true
+  system: false
+  create_group: false
+  managevim: false
+  purge_sshkeys: true
+accounts::user_list:
+  zezav:
+    uid: 1000
+    comment: 'Jan Trojak'
+    sshkeys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDy8nNjXqO4l1tHZwkoRYvKhhmBCIpbp2LWb3W63USkv trojakjan24@gmail.com
+    groups:
+      - sudo
+sudo::configs:
+  sudo_nopasswd:
+    content: '%sudo ALL=(ALL) NOPASSWD: ALL'
+    priority: 10
+  root_nopasswd:
+    content: 'root ALL=(ALL) NOPASSWD:ALL'
+    priority: 90
+ssh::server_options:
+  Port: [22]
+  PubkeyAuthentication: 'yes'
+  PermitEmptyPasswords: 'no'
+  AllowAgentForwarding: 'no'
+  GSSAPIAuthentication: 'no'
+  PasswordAuthentication: 'no'
+  UseDNS: 'no'
+  X11Forwarding: 'no'
+  AuthorizedKeysFile: .ssh/authorized_keys /etc/ssh/authorized_keys/%u
+ssh::storeconfigs_enabled: false
+classes: []
+lookup_options:
+  accounts::user_list:
+    merge: deep
+    merge_hash_arrays: true
+  accounts::group_list:
+    merge: deep
+    merge_hash_arrays: true
+  apt::sources:
+    merge: deep
+  classes:
+    merge: unique
+  sudo::configs:
+    merge:
+      strategy: deep
+      merge_hash_arrays: true
+profile::certbot::email: 'trojakjan24@gmail.com'

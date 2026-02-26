@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "rgeraskin.mise",
+    "esbenp.prettier-vscode",
+    "jkillian.custom-local-formatters"
+  ]
+}

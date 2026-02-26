@@ -1,0 +1,13 @@
+{
+  "customLocalFormatters.formatters": [
+    {
+      "command": "mise exec -- bundle exec puppet-lint ${file} -f >/dev/null && cat ${file}",
+      "languages": ["puppet"],
+      "notes": "Runs puppet-lint with auto-fix"
+    }
+  ],
+  "[puppet]": {
+    "editor.defaultFormatter": "jkillian.custom-local-formatters",
+    "editor.formatOnSave": false
+  }
+}

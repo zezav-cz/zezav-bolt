@@ -1,0 +1,16 @@
+root = true
+
+[*]
+charset = utf-8
+trim_trailing_whitespace = true
+indent_style = space
+quote_type = single
+spaces_around_operators = true
+spaces_around_brackets = true
+
+[*.{yaml,yml,json,pp}]
+indent_size = 2
+
+[*.go]
+indent_size = 4
+indent_style = tab

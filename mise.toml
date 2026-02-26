@@ -1,0 +1,31 @@
+[tools]
+dagger = "0.19"
+"go:github.com/editorconfig-checker/editorconfig-checker/v3/cmd/editorconfig-checker" = "3.6"
+go = "1.22"
+lefthook = "2"
+prettier = "3.8"
+ruby = "3.2"
+
+[env]
+BOLT_GEM = true
+
+[tasks.lint]
+description ="Lint puppet code"
+run = """
+bundle exec puppet-lint .
+prettier -c .
+editorconfig-checker
+"""
+
+[tasks.fix]
+description = "Fixes puppet code"
+run = """
+bundle exec puppet-lint . -f
+prettier --write .
+"""
+
+[tasks.modules]
+description = "Installs bolt modules"
+run = "bundle exec bolt module install --force"
+
+

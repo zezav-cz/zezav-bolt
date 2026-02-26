@@ -1,0 +1,6 @@
+.bundle/bin
+.bundle/gems
+.modules/
+.resource_types/
+.rerun.json
+**/*.pp

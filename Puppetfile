@@ -1,0 +1,31 @@
+# This Puppetfile is managed by Bolt. Do not edit.
+# For more information, see https://pup.pt/bolt-modules
+
+# The following directive installs modules to the managed moduledir.
+moduledir '.modules'
+
+mod 'puppetlabs/cron_core', '2.0.2'
+mod 'puppet/letsencrypt', '13.1.0'
+mod 'puppet/quadlets', '3.3.0'
+mod 'puppet/archive', '8.1.0'
+mod 'puppet/systemd', '9.4.0'
+mod 'puppet/posix_acl', '3.1.0'
+mod 'puppetlabs/augeas_core', '1.5.0'
+mod 'puppet/firewalld', '5.1.0'
+mod 'puppet/nginx', '7.0.1'
+mod 'puppetlabs/apt', '11.2.0'
+mod 'saz/locales', '5.0.0'
+mod 'saz/ssh', '14.1.0'
+mod 'saz/sudo', '9.0.2'
+mod 'puppetlabs/concat', '9.1.0'
+mod 'puppetlabs/sshkeys_core', '2.5.0'
+mod 'puppetlabs/ruby_task_helper', '1.0.0'
+mod 'puppetlabs/stdlib', '9.7.0'
+mod 'puppetlabs/facts', '1.7.0'
+mod 'puppetlabs/puppet_agent', '4.26.0'
+mod 'puppetlabs/accounts', '8.3.1'
+mod 'puppet/openvox_bootstrap', '1.3.0'
+mod 'puppetlabs/inifile', '6.3.0'
+mod 'puppet/epel', '5.0.0'
+mod 'puppetlabs/powershell', '6.1.0'
+mod 'puppetlabs/pwshlib', '2.0.0'
