@@ -1,5 +1,7 @@
 # Zezav Cloud Infrastructure
 
+![CI Pipeline](https://github.com/zezav-cz/zezav-bolt/actions/workflows/checks.yml/badge.svg)
+
 ## Introduction
 
 Welcome to the **Zezav Cloud Infrastructure** repository. This is a personal project used to manage my slowly growing infrastructure, where I host various services for my personal needs.
