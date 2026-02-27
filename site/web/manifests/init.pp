@@ -50,5 +50,4 @@ class web (
   include web::zezav_cz
   include web::blog_zezav_cz
   include web::dir_zezav_cz
-  include web::pub_zezav_cz
 }
