@@ -1,0 +1,10 @@
+---
+classes:
+  - podman_quadlet
+  - podman_quadlet::container::minecraft
+
+podman_quadlet::container::minecraft::tailscale_ip: '100.94.228.12'
+podman_quadlet::container::minecraft::environment:
+  ICON: 'https://github.com/zezav-cz.png'
+  SERVER_NAME: 'kdev02.de'
+  WHITELIST: 'zezav_cz,cowjen,tata'
