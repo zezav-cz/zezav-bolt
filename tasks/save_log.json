@@ -1,0 +1,15 @@
+{
+  "description": "Write content to a local file",
+  "input_method": "stdin",
+  "private": true,
+  "parameters": {
+    "path": {
+      "type": "String",
+      "description": "File path to write to"
+    },
+    "content": {
+      "type": "String",
+      "description": "Content to write"
+    }
+  }
+}

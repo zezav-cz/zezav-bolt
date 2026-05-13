@@ -1,0 +1,21 @@
+<%- | String $discovery_url,
+      String $client_id,
+      String $client_secret,
+      String $session_secret,
+      String $redirect_uri,
+      String $logout_redirect_uri,
+| -%>
+return {
+  redirect_uri              = "<%= $redirect_uri %>",
+  discovery                 = "<%= $discovery_url %>",
+  client_id                 = "<%= $client_id %>",
+<% if $client_secret != '' { -%>
+  client_secret             = "<%= $client_secret %>",
+<% } -%>
+  use_pkce                  = true,
+  scope                     = "openid email profile",
+  session_secret            = "<%= $session_secret %>",
+  ssl_verify                = "yes",
+  logout_path               = "/logout",
+  post_logout_redirect_uri  = "<%= $logout_redirect_uri %>",
+}

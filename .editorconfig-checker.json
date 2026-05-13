@@ -1,0 +1,3 @@
+{
+  "Exclude": [".bundle", ".modules", ".resource_types"]
+}
