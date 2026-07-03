@@ -1,14 +1,14 @@
-# Manages the private.zezav.cz website, protected by OIDC via lua-resty-openidc.
+# @summary Manages the private.zezav.cz website, protected by OIDC via lua-resty-openidc.
 #
 # @param oidc_discovery_url OIDC provider discovery URL
 # @param oidc_client_id     OIDC client ID registered for this site
-# @param oidc_client_secret OIDC client secret
 # @param oidc_session_secret Random secret used to sign session cookies (min 32 chars)
+# @param oidc_client_secret OIDC client secret (empty for PKCE apps)
 class web::private_zezav_cz (
   String $oidc_discovery_url,
   String $oidc_client_id,
-  String $oidc_client_secret  = '',
   String $oidc_session_secret,
+  String $oidc_client_secret = '',
 ) {
   $_server = 'private.zezav.cz'
 
@@ -66,8 +66,9 @@ class web::private_zezav_cz (
     try_files   => ['$uri', '$uri/', '=404'],
     index_files => ['index.html'],
     raw_append  => [
+      # lint:ignore:strict_indent heredoc body confuses the check
       @("OIDC"),
-                        access_by_lua_block {
+        access_by_lua_block {
           local opts = require("oidc_opts")
           local res, err = require("resty.openidc").authenticate(opts)
           if err then
@@ -77,6 +78,7 @@ class web::private_zezav_cz (
           end
         }
         |-OIDC
+      # lint:endignore
     ],
     require     => [
       File['/etc/nginx/lua/oidc_opts.lua'],
