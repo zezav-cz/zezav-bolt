@@ -1,4 +1,4 @@
-# Manages node_exporter binary installation
+# @summary Manages node_exporter binary installation
 #
 # @param version
 #   The version of node_exporter to install
@@ -9,7 +9,7 @@
 # @param filename
 #   Optional custom filename for the archive. If not provided, will be auto-generated based on version and platform
 class monitoring::binary::node_exporter (
-  String           $version         = '1.10.2',
+  String           $version,
   Boolean          $checksum_verify = true,
   Optional[String] $checksum        = undef,
   Optional[String] $filename        = undef,
