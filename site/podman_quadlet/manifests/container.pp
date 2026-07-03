@@ -93,7 +93,7 @@ define podman_quadlet::container (
 
   quadlets::quadlet { "${name}.container":
     ensure           => present,
-    active           => true,
+    active           => $active,
     validate_quadlet => false,
     mode             => '0444',
     unit_entry       => { 'Description' => "Podman container: ${name}" } + $unit_settings,

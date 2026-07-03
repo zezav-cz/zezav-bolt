@@ -1,7 +1,7 @@
-# @summary Headscale control server container (disabled by default)
+# @summary Headscale control server container
 #
 # Manages the headscale container and its configuration file.
-# The service is inactive by default — set active => true when ready to enable.
+# The service is active by default — set active => false to keep it stopped.
 #
 # @param server_url
 #   Public URL clients connect to (e.g. 'https://vpn.example.com')
@@ -15,6 +15,8 @@
 #   OIDC provider issuer URL
 # @param oidc_client_id
 #   OIDC client ID
+# @param fw
+#   Whether to manage the firewalld rules for headscale (HTTP/HTTPS, WireGuard, STUN)
 # @param image
 #   Container image reference
 # @param active
@@ -67,7 +69,6 @@ class podman_quadlet::container::headscale (
   }
   if ($fw) {
     ['public', 'block', 'drop', 'internal', 'trusted'].each |$zone| {
-      # TODO remove internal and trusted
       firewalld_service { "Allow HTTPS - headscale - ${zone}":
         ensure  => 'present',
         zone    => $zone,
@@ -80,7 +81,6 @@ class podman_quadlet::container::headscale (
       }
     }
     ['public', 'internal', 'block', 'trusted'].each |$zone| {
-      # TODO remove internal and trusted
       firewalld_port { "Allow WireGuard - headscale - ${zone}":
         ensure   => 'present',
         zone     => $zone,
@@ -122,9 +122,4 @@ class podman_quadlet::container::headscale (
     unit_settings      => { 'Description' => 'Headscale - Open source Tailscale control server' },
     require            => [File['/etc/headscale/config.yaml'], File['/var/lib/headscale']],
   }
-
-  # host { $tls_hostname:
-  #   ensure => present,
-  #   ip     => '127.0.0.1',
-  # }
 }
