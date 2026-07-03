@@ -21,9 +21,10 @@ bundle exec bolt plan run zezav_bolt::install -t <node>
 # Deploy in noop/dry-run mode
 bundle exec bolt plan run zezav_bolt::install -t <node> noop=true
 
-# Lint
-mise run lint             # puppet-lint + prettier + editorconfig-checker
-mise run fix              # auto-fix lint issues
+# Lint / format
+mise run lint             # puppet-lint + parser validate + prettier + editorconfig-checker
+mise run fmt              # auto-fix lint issues
+mise run ci               # all checks (what CI runs)
 ```
 
 ## Architecture
@@ -38,12 +39,11 @@ Hiera hierarchy (`hiera.yaml`): per-node FQDN → common.
 
 All custom Puppet code lives under `site/` as self-contained modules:
 
-- **profile/** — Base infrastructure: accounts, SSH, sudo, APT, firewalld, tailscale, certbot, fail2ban
-- **web/** — Nginx sites (zezav.cz, blog, dir)
-- **podman_quadlet/** — Systemd quadlet containers (Prometheus, Grafana, wg-easy) with podman networks
-- **monitoring/** — Node exporter binary management with architecture-specific checksums
+- **profile/** — Base infrastructure: accounts, SSH, sudo, APT, firewalld, tailscale, certbot, sysctl, timesync, unattended upgrades (fail2ban exists but is not yet classified — see TODO.md)
+- **web/** — Nginx sites (zezav.cz, blog, dir, private with OIDC)
+- **podman_quadlet/** — Systemd quadlet containers (headscale, minecraft) with podman networks
+- **monitoring/** — Node exporter binary management with architecture-specific checksums (not yet enabled on any node — see TODO.md)
 - **general/** — MOTD and utilities
-- **vpn/** — VPN firewall rules
 
 Each module can have its own `data/` directory for module-level hiera data.
 

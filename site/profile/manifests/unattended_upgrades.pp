@@ -1,4 +1,4 @@
-# Configures automatic security updates via unattended-upgrades
+# @summary Configures automatic security updates via unattended-upgrades
 #
 # @param origins
 #   Allowed origin patterns for automatic upgrades

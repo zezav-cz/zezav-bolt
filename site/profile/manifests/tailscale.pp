@@ -1,4 +1,4 @@
-# Installs and manages Tailscale VPN client
+# @summary Installs and manages Tailscale VPN client
 #
 # @param release
 #   Debian release codename for the Tailscale apt repository

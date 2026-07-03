@@ -1,4 +1,4 @@
-# Installs and configures podman container runtime.
+# @summary Installs and configures podman container runtime.
 class profile::podman {
   include podman
 

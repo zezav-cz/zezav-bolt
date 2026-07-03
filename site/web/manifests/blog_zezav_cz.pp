@@ -1,4 +1,4 @@
-# Manages the blog.zezav.cz website.
+# @summary Manages the blog.zezav.cz website.
 class web::blog_zezav_cz {
   $_server = 'blog.zezav.cz'
 

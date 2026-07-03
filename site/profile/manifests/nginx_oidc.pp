@@ -1,4 +1,4 @@
-# Installs libnginx-mod-http-lua and lua-resty-openidc for OIDC authentication.
+# @summary Installs libnginx-mod-http-lua and lua-resty-openidc for OIDC authentication.
 class profile::nginx_oidc {
   package { ['libnginx-mod-http-lua', 'luarocks', 'lua-cjson']:
     ensure => installed,

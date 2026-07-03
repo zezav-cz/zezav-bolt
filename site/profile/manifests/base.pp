@@ -1,4 +1,5 @@
-# Base profile applied to all nodes.
+# @summary Base profile applied to all nodes.
+#
 # Sets up core infrastructure: user directories, system services,
 # firewall, and Tailscale VPN.
 class profile::base {

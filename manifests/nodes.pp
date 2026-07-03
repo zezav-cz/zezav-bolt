@@ -1,4 +1,5 @@
-# Node classification — maps each server hostname to its set of profiles.
+# @summary Node classification — maps each server hostname to its set of profiles.
+#
 # Unknown nodes trigger a catalog compilation failure.
 class zezav_bolt::nodes {
   case $facts['networking']['hostname'] {

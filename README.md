@@ -14,6 +14,11 @@ This project utilizes a modern development stack to ensure consistency and relia
 - **Lefthook**: Used for managing Git hooks.
 - **Dagger**: Used for CI/CD pipelines.
 
+### Prerequisites
+
+- [mise](https://mise.jdx.dev/) — installs everything else (Ruby 3.2, prettier, lefthook, dagger, …) from `mise.toml`
+- SSH access to the target nodes as `root` (see `inventory.yaml`)
+
 ### Initialization Steps
 
 To get started with development, follow these steps to initialize your environment:
@@ -39,11 +44,20 @@ To get started with development, follow these steps to initialize your environme
 
 When running Bolt commands, it is crucial to always prefix them with `bundle exec bolt`. This ensures that the correct Ruby environment and dependencies are used for execution.
 
+### Available Tasks
+
+| Task               | Purpose                                                     |
+| ------------------ | ----------------------------------------------------------- |
+| `mise run fmt`     | Auto-fix puppet-lint issues and reformat YAML/JSON          |
+| `mise run lint`    | puppet-lint, puppet parser validate, prettier, editorconfig |
+| `mise run ci`      | Run all checks (currently `lint`; tests planned — see TODO) |
+| `mise run modules` | Install Puppet modules from `bolt-project.yaml`             |
+
 ## Repository Structure
 
 Here is a brief overview of the main directories and files in this repository:
 
-- `site/`: Custom Puppet profiles, roles, and modules specific to this infrastructure.
+- `site/`: Custom Puppet modules specific to this infrastructure (`profile`, `web`, `podman_quadlet`, `monitoring`, `general`).
 - `plans/`: Bolt plans used for orchestration and task execution.
 - `data/`: Hiera data for configuration management and secrets.
 - `inventory.yaml`: Target node definitions and connection details.
@@ -53,16 +67,16 @@ Here is a brief overview of the main directories and files in this repository:
 
 Here are a couple of practical examples of how to run Bolt plans within this project:
 
-**Pinging all nodes:**
-
-```bash
-bundle exec bolt plan run zezav_bolt::ping -t all
-```
-
 **Provisioning or updating a specific node:**
 
 ```bash
 bundle exec bolt plan run zezav_bolt::install -t <node>
+```
+
+**Dry run (noop) against a node:**
+
+```bash
+bundle exec bolt plan run zezav_bolt::install -t <node> noop=true
 ```
 
 ## Disclaimer

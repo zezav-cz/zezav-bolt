@@ -1,4 +1,4 @@
-# Manages uploader user and SSH authorized keys with restrictions
+# @summary Manages uploader user and SSH authorized keys with restrictions
 #
 # @param settings
 #   Array of SSH key configurations. Each entry contains 'restriction' (SSH command restriction string) and 'public_keys' (array of public key strings)

@@ -1,4 +1,4 @@
-# Manages the dir.zezav.cz directory listing site with JSON API support.
+# @summary Manages the dir.zezav.cz directory listing site with JSON API support.
 class web::dir_zezav_cz {
   $_server = 'dir.zezav.cz'
 

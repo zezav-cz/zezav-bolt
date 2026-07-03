@@ -1,4 +1,4 @@
-# Manages the zezav.cz website with www-to-apex redirect.
+# @summary Manages the zezav.cz website with www-to-apex redirect.
 class web::zezav_cz {
   $_server     = 'zezav.cz'
   $_www_server = "www.${_server}"

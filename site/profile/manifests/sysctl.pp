@@ -1,4 +1,4 @@
-# Applies kernel network hardening via sysctl
+# @summary Applies kernel network hardening via sysctl
 #
 # @param settings
 #   Hash of sysctl key-value pairs to apply

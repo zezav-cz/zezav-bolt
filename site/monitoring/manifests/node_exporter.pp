@@ -1,4 +1,4 @@
-# Manages node_exporter service and systemd unit
+# @summary Manages node_exporter service and systemd unit
 #
 # @param version
 #   The version of node_exporter to install and run

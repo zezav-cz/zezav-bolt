@@ -1,4 +1,4 @@
-# Manages time synchronization via systemd-timesyncd
+# @summary Manages time synchronization via systemd-timesyncd
 #
 # @param ntp_servers
 #   Primary NTP servers

@@ -1,4 +1,4 @@
-# Sets up certbot for Let's Encrypt certificate management.
+# @summary Sets up certbot for Let's Encrypt certificate management.
 #
 # @param email
 #   Email address for certbot registration and renewal notifications

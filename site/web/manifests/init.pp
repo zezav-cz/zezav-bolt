@@ -1,4 +1,4 @@
-# Manages web server with nginx and firewall rules
+# @summary Manages web server with nginx and firewall rules
 #
 # @param firewall_http
 #   Whether to enable HTTP (port 80) through the firewall

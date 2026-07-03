@@ -1,4 +1,4 @@
-# Installs custom Message of the Day (MOTD) script.
+# @summary Installs custom Message of the Day (MOTD) script.
 class general::motd {
   file { '/etc/update-motd.d':
     ensure => 'directory',
