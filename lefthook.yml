@@ -6,7 +6,7 @@ pre-commit:
       run: bundle exec puppet-lint {staged_files}
     prettier:
       glob: '*.{yaml,yml,json}'
-      run: mise exec -- prettier -c .
+      run: mise exec -- prettier -c {staged_files}
     editorconfig:
       glob: '*'
       run: mise exec -- editorconfig-checker {staged_files}

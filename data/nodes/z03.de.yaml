@@ -9,5 +9,3 @@ podman_quadlet::container::headscale::tls_hostname: 'vpn.zezav.cz'
 podman_quadlet::container::headscale::base_domain: 'zezav.lan'
 podman_quadlet::container::headscale::oidc_issuer: 'https://zezav-tswrmf.eu1.zitadel.cloud'
 podman_quadlet::container::headscale::oidc_client_id: '371339222612804800'
-
-

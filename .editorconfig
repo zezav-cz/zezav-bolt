@@ -11,6 +11,9 @@ spaces_around_brackets = true
 [*.{yaml,yml,json,pp}]
 indent_size = 2
 
+[*.md]
+trim_trailing_whitespace = false
+
 [*.go]
 indent_size = 4
 indent_style = tab

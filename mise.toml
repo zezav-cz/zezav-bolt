@@ -1,57 +1,35 @@
 [tools]
-dagger = "0.19"
-"go:github.com/editorconfig-checker/editorconfig-checker/v3/cmd/editorconfig-checker" = "3.6"
-go = "1.22"
-lefthook = "2"
-prettier = "3.8"
-ruby = "3.2"
+dagger = "0.19.11"
+"go:github.com/editorconfig-checker/editorconfig-checker/v3/cmd/editorconfig-checker" = "3.6.1"
+go = "1.25.5"
+lefthook = "2.1.6"
+prettier = "3.8.5"
+ruby = "3.2.11"
 
 [env]
 BOLT_GEM = true
 
-[tasks.lint]
-description ="Lint puppet code"
-run = """
-bundle exec puppet-lint .
-prettier -c .
-editorconfig-checker
-"""
-
-[tasks.fix]
-description = "Fixes puppet code"
+[tasks.fmt]
+description = "Auto-fix puppet-lint issues and reformat YAML/JSON"
 run = """
 bundle exec puppet-lint . -f
 prettier --write .
 """
 
+[tasks.lint]
+description = "Lint and syntax-validate puppet code, check formatting"
+run = """
+bundle exec puppet-lint .
+bundle exec puppet parser validate manifests site
+bundle exec puppet parser validate --tasks plans
+prettier -c .
+editorconfig-checker
+"""
+
+[tasks.ci]
+description = "Run all checks (extend with test once specs exist — see TODO.md)"
+run = "mise run lint"
+
 [tasks.modules]
 description = "Installs bolt modules"
 run = "bundle exec bolt module install --force"
-
-# [tasks.install-masscan]
-# description = "Install masscan from source (https://github.com/robertdavidgraham/masscan)"
-# run = """
-# if command -v masscan &>/dev/null; then
-#   echo "masscan already installed: $(masscan --version 2>&1 | head -1)"
-#   exit 0
-# fi
-
-# echo "Installing build dependencies (git gcc make libpcap-dev)..."
-# sudo dnf install -y git gcc make libpcap-dev
-
-# tmpdir=$(mktemp -d)
-# trap 'rm -rf "$tmpdir"' EXIT
-
-# git clone --depth=1 https://github.com/robertdavidgraham/masscan "$tmpdir/masscan"
-# cd "$tmpdir/masscan"
-# make -j"$(nproc)"
-# sudo make install
-
-# echo "masscan installed: $(masscan --version 2>&1 | head -1)"
-# echo ""
-# echo "NOTE: masscan requires raw-socket access."
-# echo "      Either run bolt as root, or grant the capability once with:"
-# echo "      sudo setcap cap_net_raw=+eip \\$(which masscan)"
-# """
-
-

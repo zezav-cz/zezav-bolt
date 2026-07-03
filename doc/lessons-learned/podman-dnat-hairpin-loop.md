@@ -21,7 +21,7 @@ The host itself could reach `controlplane.tailscale.com` fine. A vanilla `podman
 ## What Made This Confusing
 
 - The error says **"connection refused"** (TCP RST), not "no route to host" or timeout. Connection refused from a public internet address feels impossible from a firewall-drop perspective — firewalls typically silently drop or REJECT with ICMP, not RST.
-- The host had internet access. A generic container had internet access. Only *this specific container* failed, pointing to something unique about it.
+- The host had internet access. A generic container had internet access. Only _this specific container_ failed, pointing to something unique about it.
 - The firewall (`firewalld`, nftables backend) had a `block` default zone and podman interfaces were excluded from named zones — a plausible firewall culprit. But this was a red herring; the `netavark_zone` in firewalld was correctly set up by podman, and generic containers worked fine.
 
 ---
@@ -31,6 +31,7 @@ The host itself could reach `controlplane.tailscale.com` fine. A vanilla `podman
 [pwru](https://github.com/cilium/pwru) (packet, where are you) traces every kernel network function that touches a given packet using eBPF. It was the key tool that revealed the actual drop point.
 
 Command run:
+
 ```bash
 ./pwru --output-tuple 'src net 10.88.0.0/16 and tcp dst port 443'
 ```
@@ -118,7 +119,7 @@ Bind the published port to the **server's specific external IP** instead of `0.0
 daddr <external-ip> tcp dport 443 dnat to 10.88.0.41:4443
 ```
 
-This rule only fires when traffic is destined *for the server's own IP*. Outbound container traffic going to `192.200.0.x:443` has a different destination and never matches — no hairpin.
+This rule only fires when traffic is destined _for the server's own IP_. Outbound container traffic going to `192.200.0.x:443` has a different destination and never matches — no hairpin.
 
 Netavark has no built-in per-interface filter option; specific-IP binding is the supported way to achieve the equivalent.
 
@@ -169,13 +170,13 @@ if $headscale_enabled {
 
 Any container that **both** publishes a port `N` on the host **and** makes outbound connections to port `N` on external servers will experience a DNAT hairpin loop when published to `0.0.0.0`. Common cases:
 
-| Container role | Published port | Outbound port | Affected? |
-|---|---|---|---|
-| HTTPS server fetching remote APIs | 443 | 443 | **Yes** |
-| SMTP server relaying mail | 25 | 25 | **Yes** |
-| DNS resolver | 53 | 53 | **Yes** |
-| HTTP-only server | 80 | 443 | No |
-| Database | 5432 | (none) | No |
+| Container role                    | Published port | Outbound port | Affected? |
+| --------------------------------- | -------------- | ------------- | --------- |
+| HTTPS server fetching remote APIs | 443            | 443           | **Yes**   |
+| SMTP server relaying mail         | 25             | 25            | **Yes**   |
+| DNS resolver                      | 53             | 53            | **Yes**   |
+| HTTP-only server                  | 80             | 443           | No        |
+| Database                          | 5432           | (none)        | No        |
 
 The fix is always the same: bind the host-side port to the server's external IP so the DNAT rule is destination-specific rather than catch-all.
 
