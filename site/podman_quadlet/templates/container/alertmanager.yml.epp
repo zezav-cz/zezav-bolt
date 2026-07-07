@@ -1,0 +1,23 @@
+<%- | String  $telegram_bot_token,
+      Integer $telegram_chat_id,
+      String $template_file,
+| -%>
+# Managed by Puppet — podman_quadlet::container::alertmanager
+route:
+  receiver: telegram
+  group_by: ['alertname']
+  group_wait: 0s
+  group_interval: 5m
+  repeat_interval: 4h
+
+templates:
+  - <%= $template_file %>
+
+receivers:
+  - name: telegram
+    telegram_configs:
+      - bot_token: '<%= $telegram_bot_token %>'
+        chat_id: <%= $telegram_chat_id %>
+        send_resolved: true
+        message: '{{ template "telegram.generic.message" . }}'
+        parse_mode: 'HTML'

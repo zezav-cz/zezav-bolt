@@ -1,0 +1,67 @@
+---
+accounts::group_list:
+  users: {}
+  admin: { ensure: absent }
+accounts::user_defaults:
+  group: users
+  managehome: true
+  system: false
+  create_group: false
+  managevim: false
+  purge_sshkeys: true
+accounts::user_list:
+  zezav:
+    uid: 1000
+    comment: 'Jan Trojak'
+    sshkeys:
+      - &jtrojak ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDy8nNjXqO4l1tHZwkoRYvKhhmBCIpbp2LWb3W63USkv trojakjan24@gmail.com
+    groups:
+      - sudo
+  root:
+    uid: 0
+    sshkeys: []
+sudo::configs:
+  sudo_nopasswd:
+    content: '%sudo ALL=(ALL) NOPASSWD: ALL'
+    priority: 10
+  root_nopasswd:
+    content: 'root ALL=(ALL) NOPASSWD:ALL'
+    priority: 90
+ssh::server_options:
+  Port: [22]
+  PubkeyAuthentication: 'yes'
+  PermitEmptyPasswords: 'no'
+  AllowAgentForwarding: 'no'
+  GSSAPIAuthentication: 'no'
+  PasswordAuthentication: 'no'
+  UseDNS: 'no'
+  X11Forwarding: 'no'
+  AuthorizedKeysFile: .ssh/authorized_keys /etc/ssh/authorized_keys/%u
+ssh::storeconfigs_enabled: false
+classes: []
+lookup_options:
+  accounts::user_list:
+    merge: deep
+    merge_hash_arrays: true
+  accounts::group_list:
+    merge: deep
+    merge_hash_arrays: true
+  apt::sources:
+    merge: deep
+  classes:
+    merge: unique
+  sudo::configs:
+    merge:
+      strategy: deep
+      merge_hash_arrays: true
+profile::certbot::email: 'trojakjan24@gmail.com'
+
+# Nginx defaults
+nginx::sendfile: 'on'
+nginx::http_tcp_nopush: 'on'
+nginx::http_tcp_nodelay: 'on'
+nginx::server_tokens: 'off'
+nginx::gzip: 'on'
+nginx::gzip_disable: 'msie6'
+nginx::ssl_protocols: 'TLSv1.2 TLSv1.3'
+nginx::ssl_ciphers: 'HIGH:!aNULL:!MD5'

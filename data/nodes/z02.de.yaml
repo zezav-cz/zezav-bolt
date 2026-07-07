@@ -1,0 +1,11 @@
+---
+classes:
+  - podman_quadlet
+  - podman_quadlet::container::minecraft
+
+# Placeholder — set the node's real tailnet address locally before deploying.
+podman_quadlet::container::minecraft::tailscale_ip: 'CHANGEME'
+podman_quadlet::container::minecraft::environment:
+  ICON: 'https://github.com/zezav-cz.png'
+  SERVER_NAME: 'kdev02.de'
+  WHITELIST: 'zezav_cz,cowjen,tata'

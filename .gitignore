@@ -1,0 +1,11 @@
+.modules/
+.resource_types/
+bolt-debug.log
+logs/
+.plan_cache.json
+.plugin_cache.json
+.task_cache.json
+.rerun.json
+.bundle/bin
+.bundle/gems
+mise.local.toml

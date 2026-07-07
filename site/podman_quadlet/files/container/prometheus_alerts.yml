@@ -1,0 +1,37 @@
+# Managed by Puppet — podman_quadlet::container::prometheus
+groups:
+  - name: node
+    rules:
+      - alert: TargetDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: 'Target {{ $labels.instance }} ({{ $labels.job }}) is down'
+
+      - alert: FilesystemAlmostFull
+        expr: >
+          node_filesystem_avail_bytes{fstype!~"tmpfs|ramfs"}
+          / node_filesystem_size_bytes{fstype!~"tmpfs|ramfs"} < 0.10
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: 'Filesystem {{ $labels.mountpoint }} on {{ $labels.instance }} below 10% free'
+
+      - alert: MemoryPressure
+        expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes < 0.10
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: 'Available memory on {{ $labels.instance }} below 10%'
+
+      - alert: CpuHigh
+        expr: 1 - avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) > 0.90
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: 'CPU on {{ $labels.instance }} above 90% for 15 minutes'

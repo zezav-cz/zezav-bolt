@@ -1,0 +1,14 @@
+targets:
+  - name: z01.de
+    uri: z01.de.zezav.cz
+  - name: z02.de
+    uri: z02.de.zezav.cz
+  - name: z03.de
+    uri: z03.de.zezav.cz
+config:
+  transport: ssh
+  ssh:
+    host-key-check: false
+    user: zezav
+    run-as: root
+    private-key: ~/.ssh/id_zezav_ed25519

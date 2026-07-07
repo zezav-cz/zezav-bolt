@@ -1,0 +1,5 @@
+---
+BUNDLE_BIN: ".bundle/bin"
+BUNDLE_PATH: ".bundle/gems"
+BUNDLE_GEMFILE: "Gemfile"
+BUNDLE_HTTPS://RUBYGEMS___PUPPETCORE__PUPPET__COM/: "forge-key:"

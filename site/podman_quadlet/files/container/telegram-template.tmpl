@@ -1,0 +1,32 @@
+{{ define "telegram.generic.message" }}
+{{- /* Message header with emoji, alert name, and count */ -}}
+{{ if eq .Status "firing" }}🔥 <b>{{ .GroupLabels.alertname }}</b> ({{ .Alerts.Firing | len }})
+{{ else }}✅ <b>{{ .GroupLabels.alertname }}</b> ({{ .Alerts.Resolved | len }})
+{{ end }}
+
+{{- /* Iterate through individual alerts */ -}}
+{{ range .Alerts }}
+{{ if eq .Status "firing" }}🚨{{ else }}💚{{ end }} <u><b>{{ .Labels.alertname }}</b></u>
+
+<b>Severity:</b> {{ .Labels.severity | toUpper }}
+<b>Status:</b> {{ if eq .Status "firing" }}Active{{ else }}Resolved{{ end }}
+
+{{- /* Print annotations (if any) */ -}}
+{{ if .Annotations.summary }}
+<b>Summary:</b> {{ .Annotations.summary }}
+{{ end }}
+
+{{- if .Annotations.description }}
+<b>Description:</b>
+<i>{{ .Annotations.description }}</i>
+{{ end }}
+
+{{- /* Print other labels except alertname and severity */ -}}
+<b>Details:</b>{{ range $key, $value := .Labels }}
+{{- if and (ne $key "alertname") (ne $key "severity") }}
+ • <i>{{ $key }}</i>: <code>{{ $value }}</code>
+{{- end }}
+{{- end }}
+
+{{ end }}
+{{ end }}

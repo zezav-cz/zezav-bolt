@@ -1,0 +1,18 @@
+---
+classes:
+  - web
+  - profile::uploader
+#   - podman_quadlet
+#   - profile::certbot
+profile::uploader::settings:
+  - restriction: 'restrict,command="rrsync /var/www/uploader"'
+    public_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDy8nNjXqO4l1tHZwkoRYvKhhmBCIpbp2LWb3W63USkv trojakjan24@gmail.com
+# OIDC for private.zezav.cz — create a PKCE app in Zitadel (no client secret needed).
+# Redirect URI to register: https://private.zezav.cz/redirect_uri
+web::private_zezav_cz::oidc_discovery_url: 'https://zezav-tswrmf.eu1.zitadel.cloud/.well-known/openid-configuration'
+web::private_zezav_cz::oidc_client_id: '372041474746944128'
+# Session-cookie signing secret (server-local, not registered anywhere).
+# Placeholder — set the real value locally before deploying (plaintext by
+# design for now; migrates with the secrets-management TODO).
+web::private_zezav_cz::oidc_session_secret: 'CHANGEME'
