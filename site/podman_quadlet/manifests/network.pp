@@ -30,12 +30,12 @@ define podman_quadlet::network (
   }
 
   $entry_ipv6 = $ipv6 ? {
-    true  => { 'IPv6' => 'true' },
+    true  => { 'IPv6' => true },
     false => {},
   }
 
   $entry_internal = $internal ? {
-    true  => { 'Internal' => 'true' },
+    true  => { 'Internal' => true },
     false => {},
   }
 

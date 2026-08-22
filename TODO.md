@@ -11,7 +11,7 @@
 
 ## Code quality (round 2)
 
-- [ ] **Tests** — no specs exist. Add `rspec-puppet` (via `puppetlabs_spec_helper`) for the `site/` modules and `bolt_spec/plans` for `zezav_bolt::install`; wire up `mise run test` and extend `mise run ci` to fmt + lint + test.
+- [x] **Tests** — rspec-puppet specs cover all `site/` classes/defines and `zezav_bolt::nodes` on Debian 12+13 (`mise run test`, see `doc/testing.md`); `mise run ci` now runs fmt + lint + test. Still open: `bolt_spec/plans` coverage for `zezav_bolt::install`, and a `profile::fail2ban` spec once its module is pinned.
 - [ ] **Secrets management** — `web::private_zezav_cz::oidc_session_secret` sits plaintext in `data/nodes/z01.de.yaml`. Introduce hiera-eyaml (or similar) and rotate the secret when migrating.
 - [ ] **Cross-class coupling** — `web` and `podman_quadlet::container::headscale` read `$profile::server_firewall::public_zone` directly, relying on `profile::base` include order. Replace with explicit class parameters or a hiera lookup.
 - [ ] **doc/ structure** — create `doc/architecture.md`, `doc/development.md`, `doc/operations.md`, and `doc/decisions/` (ADRs). Move the architecture description out of `CLAUDE.md` into `doc/architecture.md`.

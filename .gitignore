@@ -8,3 +8,4 @@ logs/
 .rerun.json
 .bundle/bin
 .bundle/gems
+mise.local.toml

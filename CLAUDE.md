@@ -21,10 +21,15 @@ bundle exec bolt plan run zezav_bolt::install -t <node>
 # Deploy in noop/dry-run mode
 bundle exec bolt plan run zezav_bolt::install -t <node> noop=true
 
-# Lint / format
+# Lint / format / test
 mise run lint             # puppet-lint + parser validate + prettier + editorconfig-checker
 mise run fmt              # auto-fix lint issues
+mise run test             # rspec-puppet unit tests (see doc/testing.md)
+mise run test:parallel    # rspec-puppet unit tests on all CPU cores
 mise run ci               # all checks (what CI runs)
+
+# Run a single spec (args pass through to rspec)
+mise run test -- spec/classes/profile/sysctl_spec.rb
 ```
 
 ## Architecture
@@ -59,11 +64,11 @@ External modules install to `.modules/` (via Puppetfile). The module path includ
 
 ### CI/CD
 
-Dagger pipeline (`.dagger/`, Go-based) runs checks via GitHub Actions (`.github/workflows/checks.yml`). Pre-commit hooks via Lefthook run puppet-lint, prettier, and editorconfig-checker.
+Dagger pipeline (`.dagger/`, Go-based) runs checks via GitHub Actions (`.github/workflows/checks.yml`): all `+check` functions fan out from one shared container image, and a separate `dagger call test` job runs the rspec suite (too slow for the check fan-out). Lefthook runs staged-file linters on pre-commit and the full `dagger check '**'` suite on pre-push (Dagger talks to rootless podman via `DOCKER_HOST` in the gitignored `mise.local.toml`).
 
 ## Puppet Conventions
 
 - Firewall management uses `firewalld` (not iptables) — rich rules with zones
 - Containers use podman with systemd quadlets, not docker
 - Target inventory is in `inventory.yaml` (SSH transport, root user)
-- Puppet 8.10, managed via Gemfile with `BOLT_GEM=true` env var
+- Puppet 8 comes from the `openvox` gem (via `openbolt` in the Gemfile, with `BOLT_GEM=true` env var) — don't add the `puppet` gem alongside it

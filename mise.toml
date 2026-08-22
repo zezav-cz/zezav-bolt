@@ -1,34 +1,118 @@
 [tools]
-dagger = "0.19.11"
+dagger = "0.21"
 "go:github.com/editorconfig-checker/editorconfig-checker/v3/cmd/editorconfig-checker" = "3.6.1"
 go = "1.25.5"
 lefthook = "2.1.6"
 prettier = "3.8.5"
+"pipx:yamllint" = "1.37.1"
 ruby = "3.2.11"
 
 [env]
 BOLT_GEM = true
 
-[tasks.fmt]
-description = "Auto-fix puppet-lint issues and reformat YAML/JSON"
-run = """
-bundle exec puppet-lint . -f
-prettier --write .
-"""
+[settings]
+# Serial task execution — parallel deps interleave their output unreadably
+jobs = 1
 
+[tasks."install::install_bundle"]
+description = "Install Ruby gems from Gemfile.lock"
+run = "bundle install"
+
+# ── check: parse validity ──
+[tasks.check]
+description = "Validate Puppetfile + parse-validity of all puppet/epp/erb/yaml"
+depends = [
+  "check::puppetfile",
+  "check::puppet",
+  "check::plans",
+  "check::epp",
+  "check::erb",
+  "check::hiera",
+]
+
+[tasks."check::puppetfile"]
+description = "Validate Puppetfile module pins with r10k"
+depends = ["install::install_bundle"]
+run = "bundle exec r10k puppetfile check"
+
+[tasks."check::puppet"]
+description = "Run puppet parser validate on manifests and site"
+depends = ["install::install_bundle"]
+run = "bundle exec puppet parser validate $(find manifests site -type f -name '*.pp')"
+
+[tasks."check::plans"]
+description = "Run puppet parser validate (plan language) on plans/"
+depends = ["install::install_bundle"]
+run = "bundle exec puppet parser validate --tasks plans"
+
+[tasks."check::epp"]
+description = "Validate all .epp templates under site/ with puppet epp validate"
+depends = ["install::install_bundle"]
+run = "bundle exec puppet epp validate $(find site -type f -name '*.epp')"
+
+[tasks."check::erb"]
+description = "Validate all .erb templates under site/ (erb -x | ruby -c)"
+run = '''find site -type f -name '*.erb' -exec sh -c 'erb -P -x -T - "$1" | ruby -c' _ {} \;'''
+
+[tasks."check::hiera"]
+description = "Parse-check all data/ YAML with Ruby YAML.safe_load"
+run = '''ruby -ryaml -e 'ARGV.each { |f| YAML.safe_load(File.read(f), aliases: true) }' $(find data -type f \( -name '*.yaml' -o -name '*.yml' \))'''
+
+# ── lint: style (runs check first, then the linters) ──
 [tasks.lint]
-description = "Lint and syntax-validate puppet code, check formatting"
-run = """
-bundle exec puppet-lint .
-bundle exec puppet parser validate manifests site
-bundle exec puppet parser validate --tasks plans
-prettier -c .
-editorconfig-checker
-"""
+description = "Run all checks + linters (check, puppet-lint, yamllint, prettier, editorconfig)"
+depends = ["check", "lint::puppet", "lint::yaml", "lint::prettier", "lint::editorconfig"]
 
+[tasks."lint::puppet"]
+description = "Run puppet-lint (fail on warnings) on manifests and site"
+depends = ["install::install_bundle"]
+run = "bundle exec puppet-lint --with-filename --fail-on-warnings --with-context $(find manifests site -type f -name '*.pp')"
+
+[tasks."lint::yaml"]
+description = "Run yamllint on data/"
+run = "yamllint data/"
+
+[tasks."lint::prettier"]
+description = "Check YAML/JSON/MD formatting with prettier"
+run = "prettier -c ."
+
+[tasks."lint::editorconfig"]
+description = "Check files against .editorconfig"
+run = "editorconfig-checker"
+
+# ── lint-fix: auto-correct ──
+[tasks.lint-fix]
+description = "Auto-correct puppet (puppet-lint -f) and YAML/JSON/MD (prettier)"
+depends = ["lint-fix::puppet", "lint-fix::prettier"]
+
+[tasks."lint-fix::puppet"]
+description = "Auto-correct .pp files with puppet-lint -f"
+depends = ["install::install_bundle"]
+run = "bundle exec puppet-lint -f $(find manifests site -type f -name '*.pp')"
+
+[tasks."lint-fix::prettier"]
+description = "Auto-format YAML/JSON/MD with prettier"
+run = "prettier --write ."
+
+[tasks.fmt]
+description = "Alias for lint-fix"
+depends = ["lint-fix"]
+
+# ── test ──
+[tasks.test]
+description = "Run rspec-puppet unit tests (extra args pass through to rspec)"
+depends = ["install::install_bundle"]
+run = "bundle exec rspec"
+
+[tasks."test:parallel"]
+description = "Run rspec-puppet unit tests on all CPU cores (dot output)"
+depends = ["install::install_bundle"]
+run = "bundle exec parallel_rspec spec/ -o '--format progress'"
+
+# ── aggregate ──
 [tasks.ci]
-description = "Run all checks (extend with test once specs exist — see TODO.md)"
-run = "mise run lint"
+description = "Run everything CI runs (check + lint + test)"
+depends = ["lint", "test:parallel"]
 
 [tasks.modules]
 description = "Installs bolt modules"

@@ -1,0 +1,12 @@
+---
+# Aligned with prettier's YAML output so `mise run lint-fix` always
+# produces yamllint-clean files.
+extends: default
+
+rules:
+  # prettier writes flow mappings as `{ key: value }`
+  braces:
+    min-spaces-inside: 0
+    max-spaces-inside: 1
+  # SSH keys, URLs, and secrets don't wrap
+  line-length: disable

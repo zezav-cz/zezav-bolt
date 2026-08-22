@@ -1,0 +1,7 @@
+---
+# Minimal data for catalog compilation in specs.
+classes: []
+profile::certbot::email: 'certbot@example.test'
+web::private_zezav_cz::oidc_discovery_url: 'https://idp.example.test/.well-known/openid-configuration'
+web::private_zezav_cz::oidc_client_id: 'test-client-id'
+web::private_zezav_cz::oidc_session_secret: 'test-session-secret-0123456789abcdef'

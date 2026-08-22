@@ -46,12 +46,19 @@ When running Bolt commands, it is crucial to always prefix them with `bundle exe
 
 ### Available Tasks
 
-| Task               | Purpose                                                     |
-| ------------------ | ----------------------------------------------------------- |
-| `mise run fmt`     | Auto-fix puppet-lint issues and reformat YAML/JSON          |
-| `mise run lint`    | puppet-lint, puppet parser validate, prettier, editorconfig |
-| `mise run ci`      | Run all checks (currently `lint`; tests planned — see TODO) |
-| `mise run modules` | Install Puppet modules from `bolt-project.yaml`             |
+| Task                     | Purpose                                                                                  |
+| ------------------------ | ---------------------------------------------------------------------------------------- |
+| `mise run check`         | Parse validity: Puppetfile (r10k), puppet manifests/plans, EPP/ERB templates, hiera YAML |
+| `mise run lint`          | `check` + puppet-lint, yamllint, prettier, editorconfig                                  |
+| `mise run lint-fix`      | Auto-correct puppet-lint issues and reformat YAML/JSON/MD (`fmt` is an alias)            |
+| `mise run test`          | rspec-puppet unit tests (args pass through to rspec)                                     |
+| `mise run test:parallel` | rspec-puppet unit tests on all CPU cores (dot output)                                    |
+| `mise run ci`            | Everything CI runs: `lint` (incl. `check`) + `test:parallel`                             |
+| `mise run modules`       | Install Puppet modules from `bolt-project.yaml`                                          |
+
+See [doc/testing.md](doc/testing.md) for how the test suite works — selecting
+specific specs, parallel vs. serial runs, the Debian 12/13 fact matrix, and
+hiera fixtures.
 
 ## Repository Structure
 

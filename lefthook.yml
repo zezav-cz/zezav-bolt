@@ -1,12 +1,35 @@
+# pre-commit: every lint + parse check, natively (no dagger).
+# Each leaf task is its own command so lefthook runs them in parallel
+# (mise itself runs serially, jobs = 1).
 pre-commit:
   parallel: true
   commands:
-    puppet-lint:
-      glob: '*.pp'
-      run: bundle exec puppet-lint {staged_files}
-    prettier:
-      glob: '*.{yaml,yml,json}'
-      run: mise exec -- prettier -c {staged_files}
-    editorconfig:
-      glob: '*'
-      run: mise exec -- editorconfig-checker {staged_files}
+    check-puppetfile:
+      run: mise run check::puppetfile
+    check-puppet:
+      run: mise run check::puppet
+    check-plans:
+      run: mise run check::plans
+    check-epp:
+      run: mise run check::epp
+    check-erb:
+      run: mise run check::erb
+    check-hiera:
+      run: mise run check::hiera
+    lint-puppet:
+      run: mise run lint::puppet
+    lint-yaml:
+      run: mise run lint::yaml
+    lint-prettier:
+      run: mise run lint::prettier
+    lint-editorconfig:
+      run: mise run lint::editorconfig
+
+# pre-push: the test suite plus the full containerized Dagger check suite
+# (same as CI; DOCKER_HOST comes from mise.local.toml via `mise exec`).
+pre-push:
+  commands:
+    test:
+      run: mise run test:parallel
+    dagger-check:
+      run: mise exec -- dagger check '**'

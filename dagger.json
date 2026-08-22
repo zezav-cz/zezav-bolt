@@ -1,6 +1,6 @@
 {
   "name": "zazav-bolt",
-  "engineVersion": "v0.19.10",
+  "engineVersion": "v0.21.7",
   "sdk": {
     "source": "go"
   },
